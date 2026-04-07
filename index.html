@@ -1,159 +1,354 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>认人挑战</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4eaf5 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        .title {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 420px;
+            width: 100%;
             text-align: center;
-            margin: 40px;
-            background: #f5f5f5
+        }
+
+        .category-btn {
+            background: #5b8def;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 17px;
+            margin: 10px 0;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .category-btn:hover {
+            background: #4a7bdf;
         }
 
         img {
-            max-width: 300px;
-            border-radius: 8px;
-            margin: 20px 0;
-            box-shadow: 0 0 10px #aaa
+            max-width: 280px;
+            border-radius: 15px;
+            margin: 10px 0 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         input {
-            padding: 10px;
-            width: 220px;
-            font-size: 16px
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            outline: none;
+            transition: 0.3s;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        input:focus {
+            border-color: #5b8def;
         }
 
         button {
-            padding: 10px 20px;
-            margin: 10px;
+            background: #5b8def;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
             font-size: 16px;
-            cursor: pointer
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #4a7bdf;
         }
 
         .result {
-            font-size: 18px;
+            margin-top: 20px;
+            font-size: 17px;
             font-weight: bold;
-            margin: 10px 0
+            min-height: 25px;
         }
 
         .correct {
-            color: green
+            color: #27ae60;
         }
 
         .wrong {
-            color: red
+            color: #e74c3c;
+        }
+
+        .answer {
+            color: #e74c3c;
+            font-size: 18px;
+            margin-top: 8px;
         }
 
         .score {
-            font-size: 20px;
-            color: #0066cc;
-            margin-top: 30px
+            margin-top: 25px;
+            font-size: 16px;
+            color: #5b8def;
+            font-weight: bold;
+        }
+
+        .finish-box {
+            text-align: center;
+        }
+
+        .finish-box h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .finish-box p {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin: 8px 0;
+        }
+
+        .finish-box .comment {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 12px 0;
+            color: #e74c3c;
+        }
+
+        .back-btn {
+            background: #95a5a6 !important;
+            margin-top: 12px !important;
         }
     </style>
 </head>
 
 <body>
-    <h1>认人挑战</h1>
-    <div id="game"></div>
+    <h1 class="title">认人挑战</h1>
+    <p class="subtitle">选择分类 · 每次随机20题</p>
+
+    <div class="card">
+        <div id="game"></div>
+    </div>
+
     <div class="score" id="score"></div>
 
     <script>
         // ==============================================
-        // 在这里替换成你的图片链接和答案
+        // 你可以无限加人！每个分类放几百个都没问题
+        // 系统会自动随机抽 20 个
         // ==============================================
-        const questions = [
-            {
-                img: "images/崔智秀.jpg",
-                ans: "崔智秀"
-            },
-            {
-                img: "images/范玉欣.jpg",
-                ans: "范玉欣"
-            },
-            {
-                img: "images/元天空.jpg",
-                ans: "元天空"
-            }
-                        {
-                img: "images/momo.jpg",
-                ans: "平井桃"
-            },
-            {
-                img: "images/金志垣.jpg",
-                ans: "金志垣"
-            },
-            {
-                img: "images/李修旻.jpg",
-                ans: "李修旻"
-            }
-                    {
-                img: "images/帕丽塔.jpg",
-                ans: "帕丽塔"
-            },
-            {
-                img: "images/吴海媛.jpg",
-                ans: "吴海媛"
-            },
-            {
-                img: "images/周子瑜.jpg",
-                ans: "周子瑜"
-            }
-                    
-        ];
+        const database = {
+            // 韩国男团（随便加多少）
+            kboy: [
+                { img: "images/kboy1.jpg", ans: "答案1" },
+                { img: "images/kboy2.jpg", ans: "答案2" },
+                { img: "images/kboy3.jpg", ans: "答案3" },
+                // 继续加...
+            ],
 
+            // 韩国女团（随便加多少）
+            kgirl: [
+                { img: "images/kgirl1.jpg", ans: "答案1" },
+                { img: "images/kgirl2.jpg", ans: "答案2" },
+                { img: "images/kgirl3.jpg", ans: "答案3" },
+                // 继续加...
+            ],
+
+            // TF家族（你原来的）
+            tf: [
+                { img: "images/官俊臣.jpg", ans: "官俊臣" },
+                { img: "images/左奇函.jpg", ans: "左奇函" },
+                { img: "images/杨博文.jpg", ans: "杨博文" },
+                { img: "images/王橹杰.jpg", ans: "王橹杰" },
+                { img: "images/陈奕恒.jpg", ans: "陈奕恒" },
+                { img: "images/陈浚铭.jpg", ans: "陈浚铭" },
+                { img: "images/张奕然.jpg", ans: "张奕然" },
+                { img: "images/张函瑞.jpg", ans: "张函瑞" },
+                { img: "images/李嘉森.jpg", ans: "李嘉森" },
+                { img: "images/杨涵博.jpg", ans: "杨涵博" },
+                { img: "images/魏子宸.jpg", ans: "魏子宸" },
+                { img: "images/陈思罕.jpg", ans: "陈思罕" },
+                { img: "images/李煜东.jpg", ans: "李煜东" },
+                { img: "images/张桂源.jpg", ans: "张桂源" },
+                { img: "images/聂玮辰.jpg", ans: "聂玮辰" },
+                { img: "images/马嘉祺.jpg", ans: "马嘉祺" },
+                { img: "images/丁程鑫.jpg", ans: "丁程鑫" },
+                { img: "images/宋亚轩.jpg", ans: "宋亚轩" },
+                { img: "images/刘耀文.jpg", ans: "刘耀文" },
+                { img: "images/张真源.jpg", ans: "张真源" },
+                { img: "images/严浩翔.jpg", ans: "严浩翔" },
+                { img: "images/贺峻霖.jpg", ans: "贺峻霖" },
+                
+                { img: "images/李天泽.jpg", ans: "李天泽" },
+                { img: "images/陈泗旭.jpg", ans: "陈泗旭" },
+                { img: "images/陈玺达.jpg", ans: "陈玺达" },
+                { img: "images/敖子逸.jpg", ans: "敖子逸" },
+                { img: "images/宋文嘉.jpg", ans: "宋文嘉" },
+
+                { img: "images/朱志鑫.jpg", ans: "朱志鑫" },
+                { img: "images/张泽禹.jpg", ans: "张泽禹" },
+                { img: "images/张极.jpg", ans: "张极" },
+                { img: "images/左航.jpg", ans: "左航" },
+                { img: "images/苏新皓.jpg", ans: "苏新皓" },
+                { img: "images/张峻豪.jpg", ans: "张峻豪" },
+                { img: "images/余宇涵.jpg", ans: "余宇涵" },
+                { img: "images/穆祉丞.jpg", ans: "穆祉丞" },
+                { img: "images/陈天润.jpg", ans: "陈天润" },
+                { img: "images/童宇坤.jpg", ans: "童禹坤" },
+                { img: "images/邓佳鑫.jpg", ans: "邓佳鑫" },
+                { img: "images/黄朔.jpg", ans: "黄朔" },
+                { img: "images/张子墨.jpg", ans: "张子墨" },
+                // 继续加...
+            ]
+        };
+
+        // 配置：每次随机抽 20 题
+        const PLAY_COUNT = 20;
+
+        let currentQuestions = [];
         let current = 0;
         let correct = 0;
 
+        // 打乱数组
+        function shuffle(arr) {
+            let newArr = [...arr];
+            for (let i = newArr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+            }
+            return newArr;
+        }
+
+        // 随机抽取 N 个不重复题目
+        function getRandomQuestions(arr, count) {
+            const shuffled = shuffle(arr);
+            return shuffled.slice(0, Math.min(count, arr.length));
+        }
+
+        // 首页菜单
+        function showMenu() {
+            document.getElementById("game").innerHTML = `
+                <button class="category-btn" onclick="start('kboy')">🇰🇷 韩国男团</button>
+                <button class="category-btn" onclick="start('kgirl')">🇰🇷 韩国女团</button>
+                <button class="category-btn" onclick="start('tf')">🧒 TF家族</button>
+            `;
+            document.getElementById("score").innerText = "";
+        }
+
+        // 开始游戏
+        function start(category) {
+            const all = database[category];
+            currentQuestions = getRandomQuestions(all, PLAY_COUNT);
+            current = 0;
+            correct = 0;
+            render();
+        }
+
+        // 渲染题目
         function render() {
-            if (current >= questions.length) {
-                const rate = ((correct / questions.length) * 100).toFixed(1);
+            if (current >= currentQuestions.length) {
+                const rate = ((correct / currentQuestions.length) * 100).toFixed(1);
+                let comment = "";
+
+                if (rate < 50) {
+                    comment = "额";
+                } else if (rate < 90) {
+                    comment = "还不错";
+                } else {
+                    comment = "牛坤牛坤";
+                }
+
                 document.getElementById("game").innerHTML = `
-       <h2>挑战结束！</h2>
-       <p>答对：${correct} 题，共 ${questions.length} 题</p>
-       <p>正确率：${rate}%</p>
-       <button onclick="location.reload()">再来一次</button>
-     `;
+                <div class="finish-box">
+                    <h2>🎉 挑战完成！</h2>
+                    <p>答对：${correct} 题</p>
+                    <p>总共：${currentQuestions.length} 题</p>
+                    <p>正确率：${rate}%</p>
+                    <p class="comment">${comment}</p>
+                    <button onclick="showMenu()">返回分类</button>
+                    <button class="back-btn" onclick="start('tf')">再来一次</button>
+                </div>`;
                 document.getElementById("score").innerText = "";
                 return;
             }
 
-            const q = questions[current];
+            const q = currentQuestions[current];
             document.getElementById("game").innerHTML = `
-     <img src="${q.img}" alt="人物">
-     <br>
-     <input type="text" id="input" placeholder="输入名字" autocomplete="off">
-     <button onclick="check()">提交答案</button>
-     <div id="tip"></div>
-   `;
-            document.getElementById("score").innerText =
-                `进度：${current + 1}/${questions.length}`;
+            <img src="${q.img}" alt="人物">
+            <input type="text" id="input" placeholder="请输入名字" autocomplete="off">
+            <button onclick="check()">提交答案</button>
+            <button class="back-btn" onclick="showMenu()">返回选择</button>
+            <div id="tip" class="result"></div>
+            <div id="showAnswer" class="answer"></div>
+            `;
+
+            document.getElementById("score").innerText = `📝 进度：${current + 1}/${currentQuestions.length}`;
         }
 
+        // 检查答案
         function check() {
             const user = document.getElementById("input").value.trim();
-            const ans = questions[current].ans.trim();
+            const ans = currentQuestions[current].ans.trim();
             const tip = document.getElementById("tip");
+            const showAns = document.getElementById("showAnswer");
 
             if (user === ans) {
                 tip.className = "result correct";
                 tip.innerText = "✅ 回答正确！";
+                showAns.innerText = "";
                 correct++;
             } else {
                 tip.className = "result wrong";
-                tip.innerText = "❌ 回答错误，正确答案：" + ans;
+                tip.innerText = "❌ 回答错误";
+                showAns.innerText = "正确答案：" + ans;
             }
 
             setTimeout(() => {
                 current++;
                 render();
-            }, 1200);
+            }, 1500);
         }
 
-        // 开始游戏
-        render();
+        // 启动
+        showMenu();
     </script>
 </body>
-
 </html>
+        
